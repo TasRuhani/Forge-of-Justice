@@ -1,5 +1,5 @@
 import { Inngest } from "inngest";
-import { connect } from "mongoose";
+import { connect, findByIdAndUpdate, findByIdAndDelete } from "mongoose";
 import ConnectDB from "./db";
 import User from "../models/User";
 
@@ -51,7 +51,7 @@ export const syncUserUpdate = inngest.createFunction(
 // Inngest Function to delete user data from a database
 export const syncUserDeletion = inngest.createFunction(
     {
-        id: 'delete-from-clerk',
+        id: 'delete-user-from-clerk',
     },
     {
         event: 'clerk/user.deleted',
