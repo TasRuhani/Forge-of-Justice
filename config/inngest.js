@@ -14,19 +14,21 @@ export const syncUserCreation = inngest.createFunction(
     {
         event: 'clerk/user.created',
     },
-    async ({ event }) => {
-        const { id, first_name, last_name, email_addresses, image_url, cartItems } = event.data;
-        const userData = {
-            _id: id,
-            email: email_addresses[0].email_address,
-            name: first_name + ' ' + last_name,
-            imageUrl: image_url,
-            cartItems: {}
-        }
-        await ConnectDB();
-        await User.create(userData)
-    }
-)
+async ({ event }) => {
+    const { id, first_name, last_name, email_addresses, image_url } = event.data;
+
+    const userData = {
+        _id: id,
+        email: email_addresses[0].email_address,
+        name: `${first_name} ${last_name}`,
+        imageUrl: image_url,
+        cartItems: {} // Ensure it's explicitly set
+    };
+
+    await ConnectDB();
+    const newUser = new User(userData);
+    await newUser.save();
+})
 //inngest function to update user data in a database
 
 export const syncUserUpdate = inngest.createFunction(
