@@ -22,6 +22,8 @@ const userSchema = new mongoose.Schema({
         type: Object,
         default: {},
     }
+},{
+    minimize: false 
 })
 
 const User = mongoose.models.user || mongoose.model("User", userSchema)
