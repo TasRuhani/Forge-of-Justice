@@ -23,9 +23,9 @@ const userSchema = new mongoose.Schema({
         default: {},
     }
 },{
-    minimize: false 
+    minimize: false // This option allows empty objects to be stored required for {cartItems: Object} in MongoDB
 })
 
-const User = mongoose.models.user || mongoose.model("User", userSchema)
+const User = mongoose.models.User || mongoose.model("User", userSchema)
 
 export default User;

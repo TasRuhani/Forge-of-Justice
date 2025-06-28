@@ -1,104 +1,182 @@
-'use client'
-import { productsDummyData, userDummyData } from "@/assets/assets";
-import { useUser } from "@clerk/nextjs";
+"use client";
+import { useAuth, useUser } from "@clerk/nextjs";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export const AppContext = createContext();
 
 export const useAppContext = () => {
-    return useContext(AppContext)
-}
+  return useContext(AppContext);
+};
 
 export const AppContextProvider = (props) => {
+  const currency = process.env.NEXT_PUBLIC_CURRENCY || "USD";
+  const router = useRouter();
 
-    const currency = process.env.NEXT_PUBLIC_CURRENCY
-    const router = useRouter()
+  const { user } = useUser();
+  const { getToken } = useAuth();
 
-    const { user } = useUser();
+  const [products, setProducts] = useState([]);
+  const [userData, setUserData] = useState(null);
+  const [isSeller, setIsSeller] = useState(false);
+  const [cartItems, setCartItems] = useState({});
 
+  const fetchProductData = async () => {
+    try {
+      const { data } = await axios.get("/api/product/list");
+      if (data.success) {
+        setProducts(data.products);
+      } else {
+        toast.error(data.message || "Failed to load products");
+      }
+    } catch (error) {
+      toast.error(error.message || "An error occurred while fetching products");
+    }
+  };
 
-    const [products, setProducts] = useState([])
-    const [userData, setUserData] = useState(false)
-    const [isSeller, setIsSeller] = useState(true)
-    const [cartItems, setCartItems] = useState({})
+  const fetchUserData = async () => {
+    try {
+      if (user?.publicMetadata?.role === "seller") {
+        setIsSeller(true);
+      }
 
-    const fetchProductData = async () => {
-        setProducts(productsDummyData)
+      const token = await getToken();
+      const { data } = await axios.get("/api/user/data", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (data.success) {
+        setUserData(data.user);
+        setCartItems(data.user.cartItems || {});
+      } else {
+        toast.error(data.message || "Failed to load user data");
+      }
+    } catch (error) {
+      toast.error(
+        error.message || "An error occurred while fetching user data"
+      );
+    }
+  };
+
+  const addToCart = async (itemId) => {
+    let cartData = structuredClone(cartItems);
+    if (cartData[itemId]) {
+      cartData[itemId] += 1;
+    } else {
+      cartData[itemId] = 1;
     }
 
-    const fetchUserData = async () => {
-        setUserData(userDummyData)
-    }
+    setCartItems(cartData);
 
-    const addToCart = async (itemId) => {
+    if (user) {
+      try {
+        const token = await getToken();
+        const { data } = await axios.post(
+          "/api/cart/update",
+          { cartData },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-        let cartData = structuredClone(cartItems);
-        if (cartData[itemId]) {
-            cartData[itemId] += 1;
-        }
-        else {
-            cartData[itemId] = 1;
-        }
-        setCartItems(cartData);
-
-    }
-
-    const updateCartQuantity = async (itemId, quantity) => {
-
-        let cartData = structuredClone(cartItems);
-        if (quantity === 0) {
-            delete cartData[itemId];
+        if (!data.success) {
+          toast.error(data.message || "Failed to update cart");
         } else {
-            cartData[itemId] = quantity;
+          toast.success("Item added to cart");
         }
-        setCartItems(cartData)
+      } catch (error) {
+        toast.error(error.message || "Cart update failed");
+      }
+    } else {
+      toast.error("Please login to add items to cart");
+      router.push("/login");
+    }
+  };
 
+  const updateCartQuantity = async (itemId, quantity) => {
+    let cartData = structuredClone(cartItems);
+    if (quantity === 0) {
+      delete cartData[itemId];
+    } else {
+      cartData[itemId] = quantity;
     }
 
-    const getCartCount = () => {
-        let totalCount = 0;
-        for (const items in cartItems) {
-            if (cartItems[items] > 0) {
-                totalCount += cartItems[items];
-            }
+    setCartItems(cartData);
+
+    if (user) {
+      try {
+        const token = await getToken();
+        const { data } = await axios.post(
+          "/api/cart/update",
+          { cartData },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (!data.success) {
+          toast.error(data.message || "Failed to update cart");
+        } else {
+          toast.success("Cart updated");
         }
-        return totalCount;
+      } catch (error) {
+        toast.error(error.message || "Cart update failed");
+      }
+    } else {
+      toast.error("Please login to modify your cart");
+      router.push("/login");
     }
+  };
 
-    const getCartAmount = () => {
-        let totalAmount = 0;
-        for (const items in cartItems) {
-            let itemInfo = products.find((product) => product._id === items);
-            if (cartItems[items] > 0) {
-                totalAmount += itemInfo.offerPrice * cartItems[items];
-            }
-        }
-        return Math.floor(totalAmount * 100) / 100;
+  const getCartCount = () => {
+    let totalCount = 0;
+    for (const itemId in cartItems) {
+      if (cartItems[itemId] > 0) {
+        totalCount += cartItems[itemId];
+      }
     }
+    return totalCount;
+  };
 
-    useEffect(() => {
-        fetchProductData()
-    }, [])
-
-    useEffect(() => {
-        fetchUserData()
-    }, [])
-
-    const value = {
-        user, 
-        currency, router,
-        isSeller, setIsSeller,
-        userData, fetchUserData,
-        products, fetchProductData,
-        cartItems, setCartItems,
-        addToCart, updateCartQuantity,
-        getCartCount, getCartAmount
+  const getCartAmount = () => {
+    let totalAmount = 0;
+    for (const itemId in cartItems) {
+      const itemInfo = products.find((product) => product._id === itemId);
+      if (itemInfo && cartItems[itemId] > 0) {
+        totalAmount += itemInfo.offerPrice * cartItems[itemId];
+      }
     }
+    return Math.floor(totalAmount * 100) / 100;
+  };
 
-    return (
-        <AppContext.Provider value={value}>
-            {props.children}
-        </AppContext.Provider>
-    )
-}
+  useEffect(() => {
+    fetchProductData();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserData();
+    }
+  }, [user]);
+
+  const value = {
+    user,
+    getToken,
+    currency,
+    router,
+    isSeller,
+    setIsSeller,
+    userData,
+    fetchUserData,
+    products,
+    fetchProductData,
+    cartItems,
+    setCartItems,
+    addToCart,
+    updateCartQuantity,
+    getCartCount,
+    getCartAmount,
+  };
+
+  return (
+    <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
+  );
+};
