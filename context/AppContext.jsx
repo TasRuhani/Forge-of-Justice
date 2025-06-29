@@ -144,7 +144,7 @@ export const AppContextProvider = (props) => {
         totalAmount += itemInfo.offerPrice * cartItems[itemId];
       }
     }
-    return Math.floor(totalAmount * 100) / 100;
+    return (totalAmount); // Adding 2% tax
   };
 
   useEffect(() => {

@@ -8,8 +8,8 @@ const orderSchema = new mongoose.Schema({
     },
     items: [
         {
-            productId: {
-                type: String,
+            product: {
+                type: mongoose.Schema.Types.ObjectId,
                 required: true,
                 ref: 'product',
             },
@@ -30,14 +30,13 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Shipped', 'Delivered', 'Cancelled'],
         default: 'Order Placed',
     },
     date: {
         type: Number,
         required: true
     }
-}, { timestamps: true});
+})
 
 const Order = mongoose.models.order || mongoose.model("Order", orderSchema);
 

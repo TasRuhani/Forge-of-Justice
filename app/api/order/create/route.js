@@ -20,38 +20,45 @@ export async function POST(request) {
     }
 
     //calculate amount from items
-    const amount = await items.reduce(async (acc, itmes) => {
-      const product = await Product.findById(items.product);
+    let amount = 0;
+
+    for (const item of items) {
+      const product = await Product.findById(item.product);
       if (!product) {
         return NextResponse.json(
           { success: false, message: "Product not found" },
           { status: 404 }
         );
       }
-      return acc + product.offerPrice * items.quantity;
-    },0)
+
+      amount += product.offerPrice * item.quantity;
+    }
 
     await inngest.send({
-
-        name: 'order/created',
-        data: {
-            userId,
-            address,
-            items,
-            amount: amount + Math.floor(amount * 0.02), // Adding 2% tax
-            date: Date.now()
-        }
-    })
+      name: "order/created",
+      data: {
+        userId,
+        address,
+        items,
+        amount: amount + Math.floor(amount * 0.02), // Adding 2% tax
+        date: Date.now(),
+      },
+    });
 
     //clear user cart
     const user = await User.findById(userId);
     user.cartItems = [];
     await user.save();
 
-    return NextResponse.json({ success: true, messgae: "Order placed successfully" });
-    
-} catch (error) {
-    console.log(error)
-    return NextResponse.json({ success: false, messgae: error.message }, { status: 500 });
+    return NextResponse.json({
+      success: true,
+      messgae: "Order placed successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { success: false, messgae: error.message },
+      { status: 500 }
+    );
   }
 }
