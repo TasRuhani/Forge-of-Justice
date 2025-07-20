@@ -14,9 +14,9 @@ const OrderSummary = () => {
     cartItems,
     setCartItems,
   } = useAppContext();
+
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const [userAddresses, setUserAddresses] = useState([]);
 
   const fetchUserAddresses = async () => {
@@ -48,9 +48,7 @@ const OrderSummary = () => {
 
   const createOrder = async () => {
     try {
-      if (!selectedAddress) {
-        return toast.error("Please select an address");
-      }
+      if (!selectedAddress) return toast.error("Please select an address");
 
       let cartItemsArray = Object.keys(cartItems).map((key) => ({
         product: key,
@@ -58,10 +56,7 @@ const OrderSummary = () => {
       }));
 
       cartItemsArray = cartItemsArray.filter((item) => item.quantity > 0);
-
-      if (cartItemsArray.length === 0) {
-        return toast.error("Your cart is empty");
-      }
+      if (cartItemsArray.length === 0) return toast.error("Your cart is empty");
 
       const token = await getToken();
       const { data } = await axios.post(
@@ -90,25 +85,22 @@ const OrderSummary = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      fetchUserAddresses();
-    }
+    if (user) fetchUserAddresses();
   }, [user]);
 
   return (
-    <div className="w-full md:w-96 bg-gray-500/5 p-5">
-      <h2 className="text-xl md:text-2xl font-medium text-gray-700">
-        Order Summary
-      </h2>
-      <hr className="border-gray-500/30 my-5" />
+    <div className="w-full md:w-96 bg-background p-5 text-foreground border border-border rounded-xl">
+      <h2 className="text-xl md:text-2xl font-semibold">Order Summary</h2>
+      <hr className="border-border my-5" />
+
       <div className="space-y-6">
         <div>
-          <label className="text-base font-medium uppercase text-gray-600 block mb-2">
+          <label className="text-sm font-medium uppercase block mb-2">
             Select Address
           </label>
-          <div className="relative inline-block w-full text-sm border">
+          <div className="relative w-full text-sm border border-border rounded-md">
             <button
-              className="peer w-full text-left px-4 pr-2 py-2 bg-white text-gray-700 focus:outline-none"
+              className="peer w-full text-left px-4 pr-2 py-2 bg-background rounded-md text-foreground focus:outline-none"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <span>
@@ -123,7 +115,7 @@ const OrderSummary = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="#6B7280"
+                stroke="currentColor"
               >
                 <path
                   strokeLinecap="round"
@@ -135,11 +127,11 @@ const OrderSummary = () => {
             </button>
 
             {isDropdownOpen && (
-              <ul className="absolute w-full bg-white border shadow-md mt-1 z-10 py-1.5">
+              <ul className="absolute w-full bg-background border border-border shadow-md mt-1 z-10 py-1.5 rounded-md">
                 {userAddresses.map((address, index) => (
                   <li
                     key={index}
-                    className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer"
+                    className="px-4 py-2 hover:bg-muted/20 cursor-pointer"
                     onClick={() => handleAddressSelect(address)}
                   >
                     {address.fullName}, {address.area}, {address.city},{" "}
@@ -148,7 +140,7 @@ const OrderSummary = () => {
                 ))}
                 <li
                   onClick={() => router.push("/add-address")}
-                  className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer text-center"
+                  className="px-4 py-2 hover:bg-muted/20 cursor-pointer text-center text-primary"
                 >
                   + Add New Address
                 </li>
@@ -158,43 +150,43 @@ const OrderSummary = () => {
         </div>
 
         <div>
-          <label className="text-base font-medium uppercase text-gray-600 block mb-2">
+          <label className="text-sm font-medium uppercase block mb-2">
             Promo Code
           </label>
-          <div className="flex flex-col items-start gap-3">
+          <div className="flex flex-col gap-3">
             <input
               type="text"
               placeholder="Enter promo code"
-              className="flex-grow w-full outline-none p-2.5 text-gray-600 border"
+              className="w-full bg-background text-foreground placeholder:text-foreground/50 border border-border outline-none px-4 py-2 rounded-md"
             />
-            <button className="bg-orange-600 text-white px-9 py-2 hover:bg-orange-700">
+            <button className="bg-primary text-white px-9 py-2 rounded-md hover:bg-primary/90 transition">
               Apply
             </button>
           </div>
         </div>
 
-        <hr className="border-gray-500/30 my-5" />
+        <hr className="border-border my-5" />
 
         <div className="space-y-4">
           <div className="flex justify-between text-base font-medium">
-            <p className="uppercase text-gray-600">Items {getCartCount()}</p>
-            <p className="text-gray-800">
+            <p className="uppercase">Items {getCartCount()}</p>
+            <p>
               {currency}
               {getCartAmount()}
             </p>
           </div>
-          <div className="flex justify-between">
-            <p className="text-gray-600">Shipping Fee</p>
-            <p className="font-medium text-gray-800">Free</p>
+          <div className="flex justify-between text-sm">
+            <p>Shipping Fee</p>
+            <p className="font-medium">Free</p>
           </div>
-          <div className="flex justify-between">
-            <p className="text-gray-600">Tax (2%)</p>
-            <p className="font-medium text-gray-800">
+          <div className="flex justify-between text-sm">
+            <p>Tax (2%)</p>
+            <p className="font-medium">
               {currency}
               {Math.floor(getCartAmount() * 0.02)}
             </p>
           </div>
-          <div className="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
+          <div className="flex justify-between text-lg font-semibold border-t border-border pt-3">
             <p>Total</p>
             <p>
               {currency}
@@ -206,7 +198,7 @@ const OrderSummary = () => {
 
       <button
         onClick={createOrder}
-        className="w-full bg-orange-600 text-white py-3 mt-5 hover:bg-orange-700"
+        className="w-full bg-primary text-white py-3 mt-5 rounded-md hover:bg-primary/90 transition"
       >
         Place Order
       </button>

@@ -29,8 +29,9 @@ const MyOrders = () => {
       }
     } catch (error) {
       toast.error(error.message || "Something went wrong");
-    } 
-  }
+    }
+  };
+
   useEffect(() => {
     if (user) {
       fetchOrders();
@@ -40,42 +41,42 @@ const MyOrders = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col justify-between px-6 md:px-16 lg:px-32 py-6 min-h-screen">
+      <div className="flex flex-col justify-between px-6 md:px-16 lg:px-32 py-6 min-h-screen bg-[#0e0f11] text-gray-100">
         <div className="space-y-5">
-          <h2 className="text-lg font-medium mt-6">My Orders</h2>
+          <h2 className="text-lg font-semibold mt-6 text-blue-400">My Orders</h2>
 
           {loading ? (
             <Loading />
           ) : orders.length === 0 ? (
-            <p className="text-gray-500 text-sm">You have no orders yet.</p>
+            <p className="text-gray-400 text-sm">You have no orders yet.</p>
           ) : (
-            <div className="max-w-5xl border-t border-gray-300 text-sm">
+            <div className="max-w-5xl border-t border-gray-700 text-sm">
               {orders.map((order) => (
                 <div
                   key={order._id}
-                  className="flex flex-col md:flex-row gap-5 justify-between p-5 border-b border-gray-300"
+                  className="flex flex-col md:flex-row gap-5 justify-between p-5 border-b border-gray-700"
                 >
                   <div className="flex-1 flex gap-5 max-w-80">
                     <Image
-                      className="w-16 h-16 object-cover"
+                      className="w-16 h-16 object-cover bg-white p-1 rounded"
                       src={assets.box_icon}
                       alt="box_icon"
                     />
                     <div className="flex flex-col gap-3">
-                      <span className="font-medium text-base">
+                      <span className="font-medium text-base text-blue-300">
                         {order.items
                           .map(
                             (item) => `${item.product.name} x ${item.quantity}`
                           )
                           .join(", ")}
                       </span>
-                      <span>Items: {order.items.length}</span>
+                      <span className="text-gray-400">Items: {order.items.length}</span>
                     </div>
                   </div>
 
-                  <div className="min-w-[140px]">
+                  <div className="min-w-[140px] text-gray-300">
                     <p>
-                      <span className="font-medium">
+                      <span className="font-medium text-blue-300">
                         {order.address.fullName}
                       </span>
                       <br />
@@ -87,12 +88,12 @@ const MyOrders = () => {
                     </p>
                   </div>
 
-                  <p className="font-medium my-auto whitespace-nowrap">
+                  <p className="font-semibold my-auto whitespace-nowrap text-blue-400">
                     {currency}
                     {order.amount}
                   </p>
 
-                  <div className="min-w-[140px] text-sm">
+                  <div className="min-w-[140px] text-sm text-gray-400">
                     <p className="flex flex-col gap-1">
                       <span>Method: {order.paymentMethod || "COD"}</span>
                       <span>
@@ -104,7 +105,16 @@ const MyOrders = () => {
                         })}
                       </span>
                       <span>
-                        Payment: {order.paymentStatus || "Pending"}
+                        Payment:{" "}
+                        <span
+                          className={
+                            order.paymentStatus === "Paid"
+                              ? "text-green-400 font-semibold"
+                              : "text-yellow-400 font-semibold"
+                          }
+                        >
+                          {order.paymentStatus || "Pending"}
+                        </span>
                       </span>
                     </p>
                   </div>

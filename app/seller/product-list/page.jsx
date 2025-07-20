@@ -10,7 +10,6 @@ import axios from "axios";
 
 const ProductList = () => {
   const { router, getToken, user } = useAppContext();
-
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,7 +17,7 @@ const ProductList = () => {
     try {
       const token = await getToken();
       const { data } = await axios.get("/api/product/seller-list", {
-        header: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }, // fixed typo: 'header' => 'headers'
       });
 
       if (data.success) {
@@ -39,15 +38,16 @@ const ProductList = () => {
   }, [user]);
 
   return (
-    <div className="flex-1 min-h-screen flex flex-col justify-between">
+    <div className="flex-1 min-h-screen flex flex-col justify-between  text-gray-200">
       {loading ? (
         <Loading />
       ) : (
         <div className="w-full md:p-10 p-4">
-          <h2 className="pb-4 text-lg font-medium">All Product</h2>
-          <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
-            <table className=" table-fixed w-full overflow-hidden">
-              <thead className="text-gray-900 text-sm text-left">
+          <h2 className="pb-4 text-lg font-semibold text-blue-500">All Products</h2>
+
+          <div className="flex flex-col items-center max-w-5xl w-full overflow-hidden rounded-md border border-gray-700 bg-[#1a1a1a]">
+            <table className="table-fixed w-full">
+              <thead className="text-gray-300 text-sm text-left bg-[#121212] border-b border-gray-700">
                 <tr>
                   <th className="w-2/3 md:w-2/5 px-4 py-3 font-medium truncate">
                     Product
@@ -61,33 +61,31 @@ const ProductList = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="text-sm text-gray-500">
+              <tbody className="text-sm text-gray-400">
                 {products.map((product, index) => (
-                  <tr key={index} className="border-t border-gray-500/20">
+                  <tr key={index} className="border-t border-gray-700 hover:bg-[#232323] transition">
                     <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
-                      <div className="bg-gray-500/10 rounded p-2">
+                      <div className="bg-gray-700/20 rounded p-2">
                         <Image
                           src={product.image[0]}
-                          alt="product Image"
+                          alt="product"
                           className="w-16"
                           width={1280}
                           height={720}
                         />
                       </div>
-                      <span className="truncate w-full">{product.name}</span>
+                      <span className="truncate w-full text-white">{product.name}</span>
                     </td>
-                    <td className="px-4 py-3 max-sm:hidden">
-                      {product.category}
-                    </td>
-                    <td className="px-4 py-3">${product.offerPrice}</td>
+                    <td className="px-4 py-3 max-sm:hidden">{product.category}</td>
+                    <td className="px-4 py-3 text-blue-400">${product.offerPrice}</td>
                     <td className="px-4 py-3 max-sm:hidden">
                       <button
                         onClick={() => router.push(`/product/${product._id}`)}
-                        className="flex items-center gap-1 px-1.5 md:px-3.5 py-2 bg-orange-600 text-white rounded-md"
+                        className="flex items-center gap-1 px-2 md:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
                       >
                         <span className="hidden md:block">Visit</span>
                         <Image
-                          className="h-3.5"
+                          className="h-4"
                           src={assets.redirect_icon}
                           alt="redirect_icon"
                         />

@@ -8,11 +8,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: "#000000",      // solid black
+        foreground: "#e4e4e7",      // soft white/gray
+        primary: "#2563eb",         // Tailwind blue-600
+        "primary-dark": "#1e40af",  // Tailwind blue-800
       },
-      gridTemplateColumns:{
-        'auto': 'repeat(auto-fit, minmax(200px, 1fr))'
+      gridTemplateColumns: {
+        auto: "repeat(auto-fit, minmax(200px, 1fr))",
       },
     },
   },
