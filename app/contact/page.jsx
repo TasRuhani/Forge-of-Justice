@@ -13,7 +13,7 @@ const Contact = () => {
 
           <p className="text-gray-300 text-lg leading-8">
             Got questions, feedback, or inquiries? We're here to help. Fill out the form below or reach us directly at 
-            <span className="text-blue-400 font-medium"> support@yourstore.com</span>.
+            <span className="text-blue-400 font-medium"> support@forgeofjustice.com</span>.
           </p>
 
           <form className="space-y-6">

@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import Link from "next/link";
 
 const HeaderSlider = () => {
   const sliderData = [
     {
       id: 1,
-      title: "Experience Pure Sound - Your Perfect Headphones Awaits!",
-      offer: "Limited Time Offer 30% Off",
+      title: "Soar with Style – The Cloak of Levitation Has Chosen You!",
+      offer: "Limited Time Artifact – Claim It Before It Floats Away!",
       buttonText1: "Buy now",
-      buttonText2: "Find more",
-      imgSrc: assets.header_headphone_image,
+      link: "/product/687d1cfce0dcab85fb8a300b",
+      imgSrc: assets.cloak_of_levitation,
     },
     {
       id: 2,
-      title: "Next-Level Gaming Starts Here - Discover PlayStation 5 Today!",
-      offer: "Hurry up only few lefts!",
+      title: "Dominate the Streets – Batman’s Tumbler Is Ready to Roll!",
+      offer: "Only a Few Units Straight from Wayne Enterprises!",
       buttonText1: "Shop Now",
-      buttonText2: "Explore Deals",
-      imgSrc: assets.header_playstation_image,
+      link: "/product/687d0f28e0dcab85fb8a2ff5",
+      imgSrc: assets.tumbler,
     },
     {
       id: 3,
-      title: "Power Meets Elegance - Apple MacBook Pro is Here for you!",
-      offer: "Exclusive Deal 40% Off",
+      title: "Wield Unlimited Power – The Infinity Gauntlet Awaits You!",
+      offer: "Snap Up This Deal – Cosmic Savings of 40%!",
       buttonText1: "Order Now",
-      buttonText2: "Learn More",
-      imgSrc: assets.header_macbook_image,
+      link: "/product/687d1279e0dcab85fb8a2fff",
+      imgSrc: assets.infinity_gauntlet,
     },
   ];
 
@@ -63,25 +64,21 @@ const HeaderSlider = () => {
               <h1 className="max-w-lg md:text-[40px] md:leading-[48px] text-2xl font-semibold">
                 {slide.title}
               </h1>
-              <div className="flex items-center mt-4 md:mt-6">
-                <button className="md:px-10 px-7 md:py-2.5 py-2 bg-primary rounded-full text-white font-medium transition hover:bg-primary/80">
-                  {slide.buttonText1}
-                </button>
-                <button className="group flex items-center gap-2 px-6 py-2.5 font-medium text-primary">
-                  {slide.buttonText2}
-                  <Image
-                    className="group-hover:translate-x-1 transition"
-                    src={assets.arrow_icon}
-                    alt="arrow_icon"
-                  />
-                </button>
+              <div className="flex items-center mt-4 md:mt-6 gap-2">
+                <Link href={slide.link}>
+                  <button className="md:px-10 px-7 md:py-2.5 py-2 bg-primary rounded-full text-white font-medium transition hover:bg-primary/80">
+                    {slide.buttonText1}
+                  </button>
+                </Link>
               </div>
             </div>
-            <div className="flex items-center flex-1 justify-center">
+            <div className="flex items-center flex-1 justify-center h-[300px]">
               <Image
-                className="md:w-72 w-48"
                 src={slide.imgSrc}
                 alt={`Slide ${index + 1}`}
+                width={300}
+                height={300}
+                className="object-contain w-auto h-full"
               />
             </div>
           </div>

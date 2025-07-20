@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { assets } from "@/assets/assets";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,12 +12,12 @@ const AddAddress = () => {
   const { getToken, router } = useAppContext();
 
   const [address, setAddress] = useState({
-    fullName: '',
-    phoneNumber: '',
-    pincode: '',
-    area: '',
-    city: '',
-    state: '',
+    fullName: "",
+    phoneNumber: "",
+    pincode: "",
+    area: "",
+    city: "",
+    state: "",
   });
 
   const onSubmitHandler = async (e) => {
@@ -25,19 +25,22 @@ const AddAddress = () => {
 
     try {
       const token = await getToken();
-      const { data } = await axios.post('/api/user/add-address', { address }, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const { data } = await axios.post(
+        "/api/user/add-address",
+        { address },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
 
       if (data.success) {
         toast.success(data.message || "Address added successfully");
-        router.push('/cart');
+        router.push("/cart");
       } else {
         toast.error(data.message || "Failed to add address");
       }
-
     } catch (error) {
       toast.error(error.message);
     }
@@ -46,10 +49,11 @@ const AddAddress = () => {
   return (
     <>
       <Navbar />
-      <div className="px-6 md:px-16 lg:px-32 py-16 flex flex-col md:flex-row justify-between text-white min-h-screen">
+      <div className="px-6 md:px-16 lg:px-32 py-16 flex flex-col md:flex-row justify-between text-white">
         <form onSubmit={onSubmitHandler} className="w-full">
           <p className="text-2xl md:text-3xl text-gray-300">
-            Add Shipping <span className="font-semibold text-blue-500">Address</span>
+            Add Shipping{" "}
+            <span className="font-semibold text-blue-500">Address</span>
           </p>
 
           <div className="space-y-3 max-w-sm mt-10">
@@ -57,21 +61,27 @@ const AddAddress = () => {
               className="px-2 py-2.5 bg-slate-800 focus:border-blue-500 transition border border-gray-600 rounded outline-none w-full text-white"
               type="text"
               placeholder="Full name"
-              onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
+              onChange={(e) =>
+                setAddress({ ...address, fullName: e.target.value })
+              }
               value={address.fullName}
             />
             <input
               className="px-2 py-2.5 bg-slate-800 focus:border-blue-500 transition border border-gray-600 rounded outline-none w-full text-white"
               type="text"
               placeholder="Phone number"
-              onChange={(e) => setAddress({ ...address, phoneNumber: e.target.value })}
+              onChange={(e) =>
+                setAddress({ ...address, phoneNumber: e.target.value })
+              }
               value={address.phoneNumber}
             />
             <input
               className="px-2 py-2.5 bg-slate-800 focus:border-blue-500 transition border border-gray-600 rounded outline-none w-full text-white"
               type="text"
               placeholder="Pin code"
-              onChange={(e) => setAddress({ ...address, pincode: e.target.value })}
+              onChange={(e) =>
+                setAddress({ ...address, pincode: e.target.value })
+              }
               value={address.pincode}
             />
             <textarea
@@ -86,14 +96,18 @@ const AddAddress = () => {
                 className="px-2 py-2.5 bg-slate-800 focus:border-blue-500 transition border border-gray-600 rounded outline-none w-full text-white"
                 type="text"
                 placeholder="City/District/Town"
-                onChange={(e) => setAddress({ ...address, city: e.target.value })}
+                onChange={(e) =>
+                  setAddress({ ...address, city: e.target.value })
+                }
                 value={address.city}
               />
               <input
                 className="px-2 py-2.5 bg-slate-800 focus:border-blue-500 transition border border-gray-600 rounded outline-none w-full text-white"
                 type="text"
                 placeholder="State"
-                onChange={(e) => setAddress({ ...address, state: e.target.value })}
+                onChange={(e) =>
+                  setAddress({ ...address, state: e.target.value })
+                }
                 value={address.state}
               />
             </div>
@@ -107,11 +121,15 @@ const AddAddress = () => {
           </button>
         </form>
 
-        <Image
-          className="md:mr-16 mt-16 md:mt-0"
-          src={assets.my_location_image}
-          alt="my_location_image"
-        />
+        <div className="mt-10 md:mt-0 flex justify-center md:justify-end w-full md:w-1/2">
+          <div className="border border-blue-500/30 rounded-2xl shadow-lg p-2 w-[550px] h-[550px]">
+            <Image
+              src={assets.my_location_image}
+              alt="my_location_image"
+              className="rounded-xl object-cover w-full h-full"
+            />
+          </div>
+        </div>
       </div>
       <Footer />
     </>

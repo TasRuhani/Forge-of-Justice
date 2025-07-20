@@ -1,18 +1,17 @@
 'use client'
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { assets } from '@/assets/assets'
 import { useAppContext } from '@/context/AppContext'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 
 const AddProduct = () => {
-  const { getToken, user } = useAppContext()
+  const { getToken } = useAppContext()
 
   const [images, setImages] = useState([null, null, null, null])
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [category, setCategory] = useState('Earphone')
+  const [category, setCategory] = useState('HeroTech')
   const [price, setPrice] = useState(0)
   const [offerPrice, setOfferPrice] = useState(0)
 
@@ -55,7 +54,7 @@ const AddProduct = () => {
         toast.success("Product added successfully!")
         setName('')
         setDescription('')
-        setCategory('Earphone')
+        setCategory('HeroTech')
         setPrice(0)
         setOfferPrice(0)
         setImages([null, null, null, null])
@@ -68,16 +67,16 @@ const AddProduct = () => {
   }
 
   return (
-    <div className="min-h-screen bg-cover bg-center bg-no-repeat ">
+    <div className="min-h-screen bg-[#111827] flex justify-center p-6">
       <form
         onSubmit={handleSubmit}
-        className=" bg-opacity-70 p-6 md:p-10 rounded-lg shadow-lg w-full max-w-2xl text-white space-y-6"
+        className="bg-[#1f2937] p-6 md:p-10 rounded-lg shadow-lg w-full max-w-2xl text-white space-y-6"
       >
         <div>
           <label className="block mb-2 font-semibold">Product Image</label>
           <div className="grid grid-cols-4 gap-2">
             {images.map((_, index) => (
-              <div key={index} className="border border-gray-400 rounded h-20 flex justify-center items-center relative">
+              <div key={index} className="border border-gray-600 rounded h-20 flex justify-center items-center relative bg-[#111827]">
                 <input
                   type="file"
                   accept="image/*"
@@ -87,7 +86,7 @@ const AddProduct = () => {
                 {images[index] ? (
                   <Image src={URL.createObjectURL(images[index])} alt="uploaded" fill className="object-cover rounded" />
                 ) : (
-                  <div className="text-xs text-gray-300 text-center">Upload</div>
+                  <div className="text-xs text-gray-400 text-center">Upload</div>
                 )}
               </div>
             ))}
@@ -101,7 +100,7 @@ const AddProduct = () => {
             placeholder="Type here"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 rounded border border-gray-300 text-black"
+            className="w-full px-4 py-2 rounded bg-[#1f2937] border border-[#2563ea] text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
@@ -112,7 +111,7 @@ const AddProduct = () => {
             placeholder="Type here"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-2 rounded border border-gray-300 text-black"
+            className="w-full px-4 py-2 rounded bg-[#1f2937] border border-[#2563ea] text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
@@ -122,13 +121,13 @@ const AddProduct = () => {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-2 rounded border border-gray-300 text-black"
+              className="w-full px-4 py-2 rounded bg-[#1f2937] border border-[#2563ea] text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
-              <option value="Earphone">Earphone</option>
-              <option value="Headphone">Headphone</option>
-              <option value="Charger">Charger</option>
-              <option value="Cable">Cable</option>
-              <option value="Case">Case</option>
+              <option value="HeroTech">HeroTech</option>
+              <option value="KnightOps">KnightOps</option>
+              <option value="Mystic">Mystic</option>
+              <option value="MetaCore">MetaCore</option>
+              <option value="Cosmic">Cosmic</option>
             </select>
           </div>
 
@@ -138,7 +137,7 @@ const AddProduct = () => {
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              className="w-full px-4 py-2 rounded border border-gray-300 text-black"
+              className="w-full px-4 py-2 rounded bg-[#1f2937] border border-[#2563ea] text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
 
@@ -148,14 +147,14 @@ const AddProduct = () => {
               type="number"
               value={offerPrice}
               onChange={(e) => setOfferPrice(e.target.value)}
-              className="w-full px-4 py-2 rounded border border-gray-300 text-black"
+              className="w-full px-4 py-2 rounded bg-[#1f2937] border border-[#2563ea] text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
 
         <button
           type="submit"
-          className="w-full py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+          className="w-full py-2 rounded bg-[#2563ea] hover:bg-blue-700 text-white font-semibold transition"
         >
           ADD
         </button>

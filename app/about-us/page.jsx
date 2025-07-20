@@ -16,25 +16,23 @@ const AboutUs = () => {
           </h1>
 
           <p className="text-gray-300 text-lg leading-8">
-            Welcome to <span className="text-blue-400 font-semibold">[Your Store Name]</span>, your go-to destination for high-quality and affordable
-            products. We believe in delivering excellence and making your online shopping experience simple, seamless, and enjoyable.
+            Welcome to <span className="text-blue-400 font-semibold">Forge of Justice</span>, the world's first and finest destination for real superhero gadgets and crime-fighting tech. We’re not talking cosplay—we’re talking functionality, innovation, and power that would make even Bruce Wayne take notes.
           </p>
 
           <div className="grid md:grid-cols-2 gap-10">
             <div>
               <h2 className="text-2xl font-semibold text-blue-400 mb-2">Our Mission</h2>
               <p className="text-gray-400 leading-7">
-                Our mission is to provide handpicked items that bring value to your life. We are driven by innovation,
-                customer satisfaction, and a commitment to ethical and sustainable practices.
+                Forge of Justice was born from the belief that power should be accessible to those who protect and serve. Whether you're a vigilante patrolling your city or a civilian in need of a little backup, we craft real-world gadgets that elevate ordinary humans into extraordinary defenders.
               </p>
             </div>
             <div>
               <h2 className="text-2xl font-semibold text-blue-400 mb-2">Why Choose Us?</h2>
               <ul className="list-disc list-inside text-gray-400 space-y-1">
-                <li>Fast and reliable delivery</li>
-                <li>Top-rated customer support</li>
-                <li>Secure and flexible payment options</li>
-                <li>Quality assurance on all products</li>
+                <li>Gadgets built with advanced real-world engineering</li>
+                <li>Used by independent defenders and licensed heroes worldwide</li>
+                <li>Tested for performance, durability, and stealth</li>
+                <li>Discreet packaging and secure global delivery</li>
               </ul>
             </div>
           </div>
@@ -42,8 +40,8 @@ const AboutUs = () => {
           <div className="border-t border-gray-700 pt-8">
             <h2 className="text-2xl font-semibold text-blue-400 mb-2">Contact Us</h2>
             <p className="text-gray-400">
-              Have questions? We’d love to hear from you.<br />
-              Email: <a href="mailto:support@yourstore.com" className="text-blue-300">support@yourstore.com</a><br />
+              Got a mission? Need gear? We're here for you.<br />
+              Email: <a href="mailto:support@forgeofjustice.com" className="text-blue-300">support@forgeofjustice.com</a><br />
               Phone: <span className="text-blue-300">+91 12345 67890</span>
             </p>
           </div>

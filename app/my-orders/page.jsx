@@ -43,7 +43,9 @@ const MyOrders = () => {
       <Navbar />
       <div className="flex flex-col justify-between px-6 md:px-16 lg:px-32 py-6 min-h-screen bg-[#0e0f11] text-gray-100">
         <div className="space-y-5">
-          <h2 className="text-lg font-semibold mt-6 text-blue-400">My Orders</h2>
+          <h2 className="text-lg font-semibold mt-6 text-blue-400">
+            My Orders
+          </h2>
 
           {loading ? (
             <Loading />
@@ -64,13 +66,19 @@ const MyOrders = () => {
                     />
                     <div className="flex flex-col gap-3">
                       <span className="font-medium text-base text-blue-300">
-                        {order.items
-                          .map(
-                            (item) => `${item.product.name} x ${item.quantity}`
-                          )
-                          .join(", ")}
+                        {Array.isArray(order.items) && order.items.length > 0
+                          ? order.items
+                              .filter((item) => item.product)
+                              .map(
+                                (item) =>
+                                  `${item.product.name} x ${item.quantity}`
+                              )
+                              .join(", ")
+                          : "No items found"}
                       </span>
-                      <span className="text-gray-400">Items: {order.items.length}</span>
+                      <span className="text-gray-400">
+                        Items: {order.items.length}
+                      </span>
                     </div>
                   </div>
 
