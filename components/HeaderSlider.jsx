@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,7 +32,10 @@ const HeaderSlider = () => {
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
 
+  // Auto slide
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % sliderData.length);
@@ -44,8 +47,42 @@ const HeaderSlider = () => {
     setCurrentSlide(index);
   };
 
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const diff = touchStartX.current - touchEndX.current;
+
+    // Swipe left
+    if (diff > 50) {
+      setCurrentSlide((prev) => (prev + 1) % sliderData.length);
+    }
+
+    // Swipe right
+    if (diff < -50) {
+      setCurrentSlide((prev) =>
+        prev === 0 ? sliderData.length - 1 : prev - 1
+      );
+    }
+
+    // Reset
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   return (
-    <div className="overflow-hidden relative w-full">
+    <div
+      className="overflow-hidden relative w-full"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <div
         className="flex transition-transform duration-700 ease-in-out"
         style={{
@@ -85,6 +122,7 @@ const HeaderSlider = () => {
         ))}
       </div>
 
+      {/* Dots */}
       <div className="flex items-center justify-center gap-2 mt-8">
         {sliderData.map((_, index) => (
           <div
